@@ -26,8 +26,8 @@ public class User implements UserDetails{
     private String avatar;
     private String email;
     private String role;
-//    @OneToOne(targetEntity = Driver.class, mappedBy = "user")
-//    private Driver driver;
+    @OneToOne(mappedBy = "user")
+    private Driver driver;
 //    @OneToOne(targetEntity = Passenger.class, mappedBy = "user")
 //    private Driver passenger;
 
@@ -58,6 +58,14 @@ public class User implements UserDetails{
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 
     @Override

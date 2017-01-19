@@ -51,7 +51,15 @@
                             <h2>${userinfo.firstname} ${userinfo.surname}</h2>
                             <p><strong>Пассажир: </strong> Да </p>
                             <p><strong>Водитель: </strong> Да </p>
-                            <p><strong>Автомобили: </strong> Да </p>
+                            <#if userinfo.driver?exists>
+                                <h4><strong>Автомобили: </strong></h4>
+                                <#list userinfo.driver.automobileList as auto>
+                                    <p>${auto.brand} ${auto.model}</p>
+                                </#list>
+
+                            </#if>
+
+
                         </div><!--/col-->
                         <div class="col-xs-12 col-sm-4 text-center">
                             <img src="http://api.randomuser.me/portraits/men/49.jpg" alt=""
@@ -66,20 +74,37 @@
                         </div><!--/col-->
 
                         <div class="col-xs-12 col-sm-6" style="background: #bce8f1">
-                            <h3 style="text-align: center">Водитель</h3>
+                            <h3 style="text-align: center">Водитель </h3>
                             <h4>Рейтинг: <strong> XXX </strong></h4>
                             <h4>Количество поездок: <strong> XXX </strong></h4>
+                        <#if user.id == userinfo.id>
+                            <h4 style="text-align: center">
+                                <a href="/newauto">
+                                    <button class="btn btn-info btn-block"><span class="fa fa-plus-circle"></span>
+                                        Добавить авто
+                                    </button>
+                                </a>
+                            </h4>
+                        </#if>
                         <#--<p>-->
                         <#--<small>Followers</small>-->
                         <#--</p>-->
-                        <#--<button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Предложить-->
-                        <#--поездку-->
-                        <#--</button>-->
                         </div><!--/col-->
                         <div class="col-xs-12 col-sm-6" style="background: #c1e2b3">
                             <h3 style="text-align: center">Пассажир</h3>
                             <h4>Рейтинг: <strong> XXX </strong></h4>
                             <h4>Количество поездок: <strong> XXX </strong></h4>
+                        <#if user.id == userinfo.id>
+                            <h4 style="text-align: center">
+                                <a href="/newtrip">
+                                    <button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span>
+                                        Предложить
+                                        поездку
+                                    </button>
+                                </a>
+                            </h4>
+                        </#if>
+
                         <#--<p>-->
                         <#--<small>Пассажир</small>-->
                         <#--</p>-->

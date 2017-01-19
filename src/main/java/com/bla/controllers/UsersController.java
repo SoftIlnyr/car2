@@ -1,7 +1,11 @@
 package com.bla.controllers;
 
+import com.bla.entities.Automobile;
+import com.bla.entities.Driver;
 import com.bla.entities.User;
 import com.bla.forms.UserForm;
+import com.bla.services.INTERFACES.AutosService;
+import com.bla.services.INTERFACES.DriversService;
 import com.bla.services.INTERFACES.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -16,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 
 /**
  * Created by softi on 16.01.2017.
@@ -26,6 +31,12 @@ public class UsersController {
 
     @Autowired
     UsersService usersService;
+
+    @Autowired
+    DriversService driversService;
+
+    @Autowired
+    AutosService autosService;
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -97,6 +108,28 @@ public class UsersController {
 //        modelMap.put("access", access);
 //        modelMap.put("talons", user.getTalons());
         return "profile";
+    }
+
+    @RequestMapping(value = "/newauto", method = RequestMethod.GET)
+    public String newAutoPage() {
+        return "newauto";
+    }
+
+    @RequestMapping(value = "/newauto", method = RequestMethod.POST)
+    public String newAuto(@ModelAttribute(name = "auto") Automobile automobile, Principal principal) {
+        User user = (User) ((Authentication) principal).getPrincipal();
+        Driver driver = user.getDriver();
+        if (driver == null) {
+            driver = new Driver();
+            driver.setUser(user);
+            driver.setRating(0);
+            driver.setAutomobileList(new ArrayList<>());
+            driver.setExperience(0);
+            driversService.addDriver(driver);
+        }
+        automobile.setDriver(driver);
+        autosService.addAuto(automobile);
+        return "redirect:/users/" + user.getId();
     }
 
 

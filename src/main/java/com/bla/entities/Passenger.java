@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * Created by softi on 16.01.2017.
  */
+@Entity
 @Table(name = "passengers", schema = "public", catalog = "carcarbla")
 public class Passenger {
     @Id
@@ -13,7 +14,8 @@ public class Passenger {
     @SequenceGenerator(name = "passengers_id_sequence", sequenceName = "passengers_id_seq", allocationSize = 1)
     private int id;
     private int rating;
-    @OneToOne(targetEntity = User.class, mappedBy = "passengerList")
+    @OneToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     @ManyToMany(targetEntity = Trip.class)
     private List<Trip> trips;

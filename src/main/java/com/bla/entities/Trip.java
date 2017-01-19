@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * Created by softi on 16.01.2017.
  */
+@Entity
 @Table(name = "trips", schema = "public", catalog = "carcarbla")
 public class Trip {
     @Id
@@ -14,7 +15,10 @@ public class Trip {
     @SequenceGenerator(name = "trips_id_sequence", sequenceName = "trips_id_seq", allocationSize = 1)
     private int id;
     @ManyToOne(targetEntity = Driver.class)
+    @JoinColumn(name = "driver_id", referencedColumnName = "id")
     private Driver driver;
+    @OneToOne
+    @JoinColumn(name = "auto_id", referencedColumnName = "id")
     private Automobile auto;
     @ManyToMany(cascade = CascadeType.ALL)
             @JoinTable(name = "passengers_trips", joinColumns = @JoinColumn(name = "trip_id"), inverseJoinColumns =

@@ -17,7 +17,8 @@ public class Automobile {
     @Column(name = "license_plate")
     String licensePlate; //госномер
     int age;
-    @OneToOne(targetEntity = Driver.class)
+    @ManyToOne(targetEntity = Driver.class)
+            @JoinColumn(name = "driver_id", referencedColumnName = "id")
     Driver driver;
 
     public Automobile() {

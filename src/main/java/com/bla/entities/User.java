@@ -1,13 +1,20 @@
 package com.bla.entities;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by softi on 12.01.2017.
  */
 @Entity
 @Table(name = "users", schema = "public", catalog = "carcarbla")
-public class User {
+public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_secuence")
     @SequenceGenerator(name = "user_id_secuence", sequenceName = "users_id_seq", allocationSize = 1)
@@ -19,10 +26,10 @@ public class User {
     private String avatar;
     private String email;
     private String role;
-    @OneToOne(targetEntity = Driver.class, mappedBy = "user")
-    private Driver driver;
-    @OneToOne(targetEntity = Passenger.class, mappedBy = "user")
-    private Driver passenger;
+//    @OneToOne(targetEntity = Driver.class, mappedBy = "user")
+//    private Driver driver;
+//    @OneToOne(targetEntity = Passenger.class, mappedBy = "user")
+//    private Driver passenger;
 
     public User(){    }
 
@@ -53,8 +60,40 @@ public class User {
         this.nickname = nickname;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(this.getRole()));
+        return grantedAuthorities;
+    }
+
     public String getPassword() {
-        return password;
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.nickname;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {
@@ -101,21 +140,21 @@ public class User {
         this.role = role;
     }
 
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public void setDriver(Driver driver) {
-        this.driver = driver;
-    }
-
-    public Driver getPassenger() {
-        return passenger;
-    }
-
-    public void setPassenger(Driver passenger) {
-        this.passenger = passenger;
-    }
+//    public Driver getDriver() {
+//        return driver;
+//    }
+//
+//    public void setDriver(Driver driver) {
+//        this.driver = driver;
+//    }
+//
+//    public Driver getPassenger() {
+//        return passenger;
+//    }
+//
+//    public void setPassenger(Driver passenger) {
+//        this.passenger = passenger;
+//    }
 
     @Override
     public String toString() {

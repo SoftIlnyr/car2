@@ -15,7 +15,8 @@ public class Driver {
     private int id;
     private int experience;
     private int rating;
-    @OneToOne(targetEntity = User.class, mappedBy = "driver")
+    @OneToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     @OneToMany(targetEntity = Automobile.class, mappedBy = "driver")
     private List<Automobile> automobileList;

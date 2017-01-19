@@ -9,15 +9,14 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @EnableAutoConfiguration
-public class SampleController {
+public class HomeController {
 
     @Autowired
     UsersService usersService;
 
     @RequestMapping("/")
-    @ResponseBody
     String home() {
-        return "Hello World! adca";
+        return "home";
     }
 
     @RequestMapping("/users")
@@ -28,7 +27,7 @@ public class SampleController {
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sample() {
-        return "sample";
+        return "home";
     }
 
 //    public static void main(String[] args) throws Exception {

@@ -2,13 +2,17 @@ package com.bla;
 
 import com.bla.repositories.UsersRepository;
 import com.bla.entities.User;
+import com.bla.security.AuthProviderIMPL;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationProvider;
 
 import java.util.Arrays;
 
@@ -30,4 +34,6 @@ public class CarcarblaApplication extends SpringBootServletInitializer {
 //			repository.save(new User("SoftIlnyr", "soft160896", "Ильнур", "Насибуллин", "softilnyr16@gmail.com", "admin", ""));
 //		};
 //	}
+
+
 }

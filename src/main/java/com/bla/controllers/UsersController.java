@@ -1,12 +1,9 @@
 package com.bla.controllers;
 
-import com.bla.entities.Automobile;
-import com.bla.entities.Driver;
-import com.bla.entities.User;
+import com.bla.entities.*;
+import com.bla.forms.TripForm;
 import com.bla.forms.UserForm;
-import com.bla.services.INTERFACES.AutosService;
-import com.bla.services.INTERFACES.DriversService;
-import com.bla.services.INTERFACES.UsersService;
+import com.bla.services.INTERFACES.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.security.core.Authentication;
@@ -20,7 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by softi on 16.01.2017.
@@ -37,6 +37,12 @@ public class UsersController {
 
     @Autowired
     AutosService autosService;
+
+    @Autowired
+    PassengersService passengersService;
+
+    @Autowired
+    TripsService tripsService;
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -89,7 +95,15 @@ public class UsersController {
 //            user.setAvatar("default.jpg");
 //        }
 
+
         usersService.addUser(user);
+
+        Passenger passenger = new Passenger();
+        passenger.setUser(user);
+        passenger.setRating(0);
+
+        passengersService.addPassenger(passenger);
+
 
         return "redirect:/login";
     }
@@ -132,6 +146,40 @@ public class UsersController {
         return "redirect:/users/" + user.getId();
     }
 
+    @RequestMapping(value = "/newtrip", method = RequestMethod.GET)
+    public String newTripPage() {
+        return "newtrip";
+    }
+
+    @RequestMapping(value = "/newtrip", method = RequestMethod.POST)
+    public String newTrip(@ModelAttribute(name = "trip") TripForm tripForm, Principal principal) {
+        User user = (User) ((Authentication) principal).getPrincipal();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Date date = null;
+        try {
+            date = formatter.parse(tripForm.getDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String autoid = tripForm.getAuto().split(" ")[0];
+        int id = Integer.parseInt(autoid);
+
+        Trip trip = new Trip();
+        trip.setDriver(user.getDriver());
+        trip.setAuto(autosService.findById(id));
+        trip.setDeparture(tripForm.getDeparture());
+        trip.setDestination(tripForm.getDestination());
+        trip.setDate(date);
+        trip.setPrice(tripForm.getPrice());
+        trip.setCount(tripForm.getCount());
+        trip.setStatus("Ожидание");
+        trip.setInfo(tripForm.getInfo());
+        trip.setPassengerList(new ArrayList<>());
+
+        tripsService.addTrip(trip);
+
+        return "users/" + user.getId();
+    }
 
 
 

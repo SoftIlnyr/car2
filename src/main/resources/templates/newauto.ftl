@@ -67,10 +67,10 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="nickname" class="col-sm-2 col-form-label">Дата выпуска</label>
+            <label for="nickname" class="col-sm-2 col-form-label">Год выпуска</label>
             <div class="col-sm-10">
                 <input type="text" name="age" class="form-control" id="age"
-                       placeholder="Дата выпуска"/>
+                       placeholder="Год выпуска"/>
             </div>
         </div>
         <div class="form-group row">

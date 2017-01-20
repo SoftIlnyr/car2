@@ -26,6 +26,7 @@ public class Trip {
     List<Passenger> passengerList;
     private String departure;
     private String destination;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     private int price;
     private int count; //количество пассажиров

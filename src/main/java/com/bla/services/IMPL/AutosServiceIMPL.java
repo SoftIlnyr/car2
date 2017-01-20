@@ -34,4 +34,9 @@ public class AutosServiceIMPL implements AutosService {
     public List<Automobile> findAll() {
         return autosRepository.findAll();
     }
+
+    @Override
+    public Automobile findById(int id) {
+        return autosRepository.findOne(id);
+    }
 }

@@ -19,7 +19,7 @@
                     <a href="#">Найти</a>
                 </li>
                 <li>
-                    <a href="#">Предложить поездку</a>
+                    <a href="/newtrip">Предложить поездку</a>
                 </li>
             <#if user?exists>
                 <li>

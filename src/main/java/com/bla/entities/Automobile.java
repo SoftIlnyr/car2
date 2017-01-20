@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Automobile {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "auto_id_generator")
-    @SequenceGenerator(name = "auto_id_generator", sequenceName = "autos_id_seq")
+    @SequenceGenerator(name = "auto_id_generator", sequenceName = "autos_id_seq", allocationSize = 1)
     int id;
     String brand;
     String model;

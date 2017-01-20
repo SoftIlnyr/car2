@@ -18,10 +18,10 @@ public class Driver {
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-    @OneToMany(targetEntity = Automobile.class, mappedBy = "driver")
+    @OneToMany(targetEntity = Automobile.class, mappedBy = "driver", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Automobile> automobileList;
-    @OneToMany(targetEntity = Trip.class, mappedBy = "driver")
-    private List<Trip> tripList;
+    @OneToMany(mappedBy = "driver")
+    private List<Trip> trips;
 
     public Driver() {
 
@@ -72,6 +72,14 @@ public class Driver {
 
     public void setAutomobileList(List<Automobile> automobileList) {
         this.automobileList = automobileList;
+    }
+
+    public List<Trip> getTrips() {
+        return trips;
+    }
+
+    public void setTrips(List<Trip> trips) {
+        this.trips = trips;
     }
 
     @Override

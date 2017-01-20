@@ -28,8 +28,8 @@ public class User implements UserDetails{
     private String role;
     @OneToOne(mappedBy = "user")
     private Driver driver;
-//    @OneToOne(targetEntity = Passenger.class, mappedBy = "user")
-//    private Driver passenger;
+    @OneToOne(mappedBy = "user")
+    private Passenger passenger;
 
     public User(){    }
 

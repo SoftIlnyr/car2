@@ -13,4 +13,6 @@ public interface AutosService {
     void update(Automobile automobile);
 
     List<Automobile> findAll();
+
+    Automobile findById(int id);
 }

@@ -51,31 +51,25 @@
                             <h2>${userinfo.firstname} ${userinfo.surname}</h2>
                             <p><strong>Пассажир: </strong> Да </p>
                             <p><strong>Водитель: </strong> Да </p>
-                            <#if userinfo.driver?exists>
-                                <h4><strong>Автомобили: </strong></h4>
-                                <#list userinfo.driver.automobileList as auto>
-                                    <p>${auto.brand} ${auto.model}</p>
-                                </#list>
+                        <#if userinfo.driver?exists>
+                            <h4><strong>Автомобили: </strong></h4>
+                            <#list userinfo.driver.automobileList as auto>
+                                <p>${auto.brand} ${auto.model}</p>
+                            </#list>
 
-                            </#if>
+                        </#if>
 
 
                         </div><!--/col-->
                         <div class="col-xs-12 col-sm-4 text-center">
                             <img src="http://api.randomuser.me/portraits/men/49.jpg" alt=""
                                  class="center-block img-circle img-responsive">
-                            <ul class="list-inline ratings text-center" title="Ratings">
-                                <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-                                <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-                                <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-                                <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-                                <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-                            </ul>
+
                         </div><!--/col-->
 
                         <div class="col-xs-12 col-sm-6" style="background: #bce8f1">
                             <h3 style="text-align: center">Водитель </h3>
-                            <h4>Рейтинг: <strong> XXX </strong></h4>
+                            <h4>Рейтинг: <strong> </strong></h4>
                             <h4>Количество поездок: <strong> XXX </strong></h4>
                         <#if user.id == userinfo.id>
                             <h4 style="text-align: center">
@@ -112,6 +106,72 @@
                         <#--</button>-->
 
                         </div><!--/col-->
+
+                    <#if bookings?has_content>
+                        <div class="col-xs-12 col-sm-12">
+                            <hr/>
+                            <h3 style="text-align: center">Желающие поехать с вами</h3>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12" style="background: #bce8f1; padding-top: 20px">
+                            <#list bookings as b>
+                                <div class="col-xs-6 col-sm-6">
+                                    <p>${b.trip.departure} - ${b.trip.destination} : ${b.trip.date} </p>
+                                    <h4>Пассажиры: ${b.passenger.user.firstname} ${b.passenger.user.firstname}
+                                        (${b.count}
+                                        пассажиров)</h4>
+                                    <p>Комментарий пассажира: ${b.info}</p>
+                                </div>
+                                <div class="col-xs-3 col-sm-3">
+
+                                    <a href="/bookings/${b.id}/conf">
+                                        <button class="btn btn-success btn-block"><span
+                                                class="fa fa-plus-circle"></span>
+                                            Принять
+                                        </button>
+                                    </a>
+                                </div>
+                                <div class="col-xs-3 col-sm-3">
+
+                                    <a href="/bookings/${b.id}/deny">
+                                        <button class="btn btn-danger btn-block"><span class="fa fa-plus-circle"></span>
+                                            Отклонить
+                                        </button>
+                                    </a>
+                                </div>
+                                <hr/>
+
+                            </#list>
+                        </div>
+                    </#if>
+
+                        <div class="col-xs-12 col-sm-12">
+                            <hr/>
+                            <h3 style="text-align: center">Предстоящие поездки</h3>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6" style="background: #bce8f1">
+                        <#if driverTrips?exists>
+                            <#list driverTrips as dt>
+                                <h4>${dt.departure} - ${dt.destination} : ${dt.date} </h4>
+                                <#if user.id != dt.driver.user.id>
+                                    <a href="/trips/${dt.id}">Записаться</a>
+                                </#if>
+                                <hr/>
+                            </#list>
+                        </#if>
+
+
+                        </div><!--/col-->
+                        <div class="col-xs-12 col-sm-6" style="background: #c1e2b3">
+                        <#if pasTrips?exists>
+                            <#list pasTrips as pt>
+                                <h4>${pt.departure} - ${pt.destination} : ${pt.date}</h4>
+                                <hr/>
+                            </#list>
+                        </#if>
+                        </div><!--/col-->
+
                         <div class="col-xs-12 col-sm-12">
                             <hr/>
                             <h3 style="text-align: center">Последние поездки</h3>

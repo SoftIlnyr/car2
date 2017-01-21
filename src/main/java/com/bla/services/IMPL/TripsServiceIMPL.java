@@ -38,4 +38,8 @@ public class TripsServiceIMPL implements TripsService {
     public Trip findById(int id) {
         return tripsRepository.findOne(id);
     }
+
+    public List<Trip> lastTrips() {
+        return tripsRepository.findTop10ByOrderByDateDesc();
+    }
 }

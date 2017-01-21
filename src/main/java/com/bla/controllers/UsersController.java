@@ -12,15 +12,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by softi on 16.01.2017.
@@ -43,6 +42,9 @@ public class UsersController {
 
     @Autowired
     TripsService tripsService;
+
+    @Autowired
+    BookingService bookingService;
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -87,7 +89,6 @@ public class UsersController {
         user.setRole("USER");
 
 
-
 //        if (!avatar.isEmpty()) {
 //            String filename = saveImage(avatar);
 //            user.setAvatar(filename);
@@ -117,8 +118,52 @@ public class UsersController {
 //                access = true;
 //            }
 //        }
-        User user = usersService.findById(user_id);
-        modelMap.put("userinfo", user);
+        User user = (User) ((Authentication) principal).getPrincipal();
+        User userinfo = usersService.findById(user_id);
+        modelMap.put("userinfo", userinfo);
+        if (userinfo.getDriver() != null && userinfo.getDriver().getTrips().size() > 0) {
+            List<Trip> tripList = userinfo.getDriver().getTrips();
+            List<Trip> driverTrips = new ArrayList<>();
+            for (Trip trip : tripList) {
+                if (trip.getStatus().contains("Ожидание")) {
+                    driverTrips.add(trip);
+                }
+            }
+            modelMap.put("driverTrips", driverTrips);
+
+        }
+
+        if (userinfo.getPassenger().getTrips().size() > 0) {
+
+            List<Trip> tripList = userinfo.getPassenger().getTrips();
+            List<Trip> pasTrips = new ArrayList<>();
+            for (Trip trip : tripList) {
+                if (trip.getStatus().contains("Ожидание")) {
+                    pasTrips.add(trip);
+                }
+            }
+            modelMap.put("pasTrips", pasTrips);
+        }
+
+        if (user.getId() == userinfo.getId() && user.getDriver() != null) {
+            List<Trip> tripList = userinfo.getDriver().getTrips();
+            List<Trip> driverTrips = new ArrayList<>();
+            for (Trip trip : tripList) {
+                if (trip.getStatus().contains("Ожидание")) {
+                    driverTrips.add(trip);
+                }
+            }
+            List<Booking> bookings = new ArrayList<>();
+            for (Trip trip : driverTrips) {
+                for (Booking booking : trip.getBookings()) {
+                    if (booking.getConfirm() == null) {
+                        bookings.add(booking);
+                    }
+                }
+            }
+            modelMap.put("bookings", bookings);
+        }
+
 //        modelMap.put("access", access);
 //        modelMap.put("talons", user.getTalons());
         return "profile";
@@ -147,7 +192,10 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/newtrip", method = RequestMethod.GET)
-    public String newTripPage() {
+    public String newTripPage(ModelMap modelMap, Principal principal) {
+        User user = (User) ((Authentication) principal).getPrincipal();
+        List<Automobile> automobileList = user.getDriver().getAutomobileList();
+        modelMap.put("automobileList", automobileList);
         return "newtrip";
     }
 
@@ -174,14 +222,50 @@ public class UsersController {
         trip.setCount(tripForm.getCount());
         trip.setStatus("Ожидание");
         trip.setInfo(tripForm.getInfo());
-        trip.setPassengerList(new ArrayList<>());
+        trip.setPassengers(new ArrayList<>());
 
         tripsService.addTrip(trip);
 
-        return "users/" + user.getId();
+        return "redirect:/users/" + user.getId();
     }
 
+    @RequestMapping(value = "/trips/{trip_id:\\d+}", method = RequestMethod.GET)
+    public String joinTripPage(ModelMap modelMap, @PathVariable int trip_id) {
+        Trip trip = tripsService.findById(trip_id);
+        modelMap.put("trip", trip);
+        return "jointrip";
+    }
 
+    @RequestMapping(value = "/trips/{trip_id:\\d+}", method = RequestMethod.POST)
+    public String JoinTrip(@ModelAttribute(name = "booking") Booking booking, @PathVariable int trip_id, Principal principal) {
+        User user = (User) ((Authentication) principal).getPrincipal();
+        booking.setTrip(tripsService.findById(trip_id));
+        booking.setPassenger(user.getPassenger());
+        bookingService.addBooking(booking);
+        return "redirect:/users/" + user.getId();
+    }
+
+    @RequestMapping(value = "/bookings/{booking_id:\\d+}/conf", method = RequestMethod.GET)
+    public String confirmBooking(@PathVariable int booking_id, Principal principal) {
+        User user = (User) ((Authentication) principal).getPrincipal();
+        Booking booking = bookingService.findById(booking_id);
+        booking.setConfirm("yes");
+        Trip trip = booking.getTrip();
+        trip.getPassengers().add(booking.getPassenger());
+        trip.setCount(trip.getCount() - booking.getCount());
+        tripsService.update(trip);
+        bookingService.update(booking);
+        return "redirect:/users/" + user.getId();
+    }
+
+    @RequestMapping(value = "/bookings/{booking_id:\\d+}/deny", method = RequestMethod.GET)
+    public String denyBooking(@PathVariable int booking_id, Principal principal) {
+        User user = (User) ((Authentication) principal).getPrincipal();
+        Booking booking = bookingService.findById(booking_id);
+        booking.setConfirm("no");
+        bookingService.update(booking);
+        return "redirect:/users/" + user.getId();
+    }
 
 
 }

@@ -16,4 +16,6 @@ public interface TripsService {
     List<Trip> findAll();
 
     Trip findById(int id);
+
+    List<Trip> lastTrips();
 }

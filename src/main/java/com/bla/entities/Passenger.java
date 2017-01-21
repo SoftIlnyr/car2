@@ -17,8 +17,10 @@ public class Passenger {
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-    @ManyToMany(targetEntity = Trip.class)
+    @ManyToMany(mappedBy = "passengers")
     private List<Trip> trips;
+    @OneToMany(mappedBy = "passenger")
+    private List<Booking> bookings;
 
     public Passenger() {
 
@@ -51,5 +53,13 @@ public class Passenger {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Trip> getTrips() {
+        return trips;
+    }
+
+    public void setTrips(List<Trip> trips) {
+        this.trips = trips;
     }
 }

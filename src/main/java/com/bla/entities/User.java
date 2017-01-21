@@ -148,21 +148,13 @@ public class User implements UserDetails{
         this.role = role;
     }
 
-//    public Driver getDriver() {
-//        return driver;
-//    }
-//
-//    public void setDriver(Driver driver) {
-//        this.driver = driver;
-//    }
-//
-//    public Driver getPassenger() {
-//        return passenger;
-//    }
-//
-//    public void setPassenger(Driver passenger) {
-//        this.passenger = passenger;
-//    }
+    public Passenger getPassenger() {
+        return passenger;
+    }
+
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
+    }
 
     @Override
     public String toString() {

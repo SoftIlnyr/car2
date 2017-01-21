@@ -23,7 +23,7 @@ public class Trip {
     @ManyToMany(cascade = CascadeType.ALL)
             @JoinTable(name = "passengers_trips", joinColumns = @JoinColumn(name = "trip_id"), inverseJoinColumns =
             @JoinColumn(name = "passenger_id"))
-    List<Passenger> passengerList;
+    List<Passenger> passengers;
     private String departure;
     private String destination;
     @Temporal(TemporalType.TIMESTAMP)
@@ -32,6 +32,8 @@ public class Trip {
     private int count; //количество пассажиров
     private String status;
     private String info; //информация и доп. условия
+    @OneToMany(mappedBy = "trip")
+    List<Booking> bookings;
 
     public Trip() {
 
@@ -73,12 +75,12 @@ public class Trip {
         this.auto = auto;
     }
 
-    public List<Passenger> getPassengerList() {
-        return passengerList;
+    public List<Passenger> getPassengers() {
+        return passengers;
     }
 
-    public void setPassengerList(List<Passenger> passengerList) {
-        this.passengerList = passengerList;
+    public void setPassengers(List<Passenger> passengers) {
+        this.passengers = passengers;
     }
 
     public String getDeparture() {
@@ -136,5 +138,14 @@ public class Trip {
     public void setInfo(String info) {
         this.info = info;
     }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
 }
+
 

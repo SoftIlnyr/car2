@@ -34,6 +34,8 @@ public class Trip {
     private String info; //информация и доп. условия
     @OneToMany(mappedBy = "trip")
     List<Booking> bookings;
+    @OneToMany(mappedBy = "trip")
+    List<Review> reviews;
 
     public Trip() {
 
@@ -141,6 +143,14 @@ public class Trip {
 
     public List<Booking> getBookings() {
         return bookings;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     public void setBookings(List<Booking> bookings) {

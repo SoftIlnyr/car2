@@ -46,6 +46,9 @@ public class UsersController {
     @Autowired
     BookingService bookingService;
 
+    @Autowired
+    ReviewsService reviewsService;
+
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @GetMapping("/login")
@@ -124,29 +127,35 @@ public class UsersController {
         if (userinfo.getDriver() != null && userinfo.getDriver().getTrips().size() > 0) {
             List<Trip> tripList = userinfo.getDriver().getTrips();
             List<Trip> driverTrips = new ArrayList<>();
+            List<Trip> endDriverTrips = new ArrayList<>();
             for (Trip trip : tripList) {
                 if (trip.getStatus().contains("Ожидание")) {
                     driverTrips.add(trip);
+                } else if (trip.getStatus().contains("Завершено")) {
+                    endDriverTrips.add(trip);
                 }
             }
             modelMap.put("driverTrips", driverTrips);
+            modelMap.put("endDriverTrips", endDriverTrips);
 
         }
 
-        if (userinfo.getPassenger().getTrips().size() > 0) {
 
-            List<Trip> tripList = userinfo.getPassenger().getTrips();
-            List<Trip> pasTrips = new ArrayList<>();
-            for (Trip trip : tripList) {
-                if (trip.getStatus().contains("Ожидание")) {
-                    pasTrips.add(trip);
-                }
+        List<Trip> tripList = userinfo.getPassenger().getTrips();
+        List<Trip> pasTrips = new ArrayList<>();
+        List<Trip> endPasTrips = new ArrayList<>();
+        for (Trip trip : tripList) {
+            if (trip.getStatus().contains("Ожидание")) {
+                pasTrips.add(trip);
+            } else if (trip.getStatus().contains("Завершено")) {
+                endPasTrips.add(trip);
             }
-            modelMap.put("pasTrips", pasTrips);
         }
+        modelMap.put("pasTrips", pasTrips);
+        modelMap.put("endPasTrips", endPasTrips);
 
         if (user.getId() == userinfo.getId() && user.getDriver() != null) {
-            List<Trip> tripList = userinfo.getDriver().getTrips();
+            tripList = userinfo.getDriver().getTrips();
             List<Trip> driverTrips = new ArrayList<>();
             for (Trip trip : tripList) {
                 if (trip.getStatus().contains("Ожидание")) {
@@ -185,6 +194,8 @@ public class UsersController {
             driver.setAutomobileList(new ArrayList<>());
             driver.setExperience(0);
             driversService.addDriver(driver);
+            user.setRole("DRIVER");
+            usersService.update(user);
         }
         automobile.setDriver(driver);
         autosService.addAuto(automobile);
@@ -267,5 +278,57 @@ public class UsersController {
         return "redirect:/users/" + user.getId();
     }
 
+    @RequestMapping(value = "/trips/{trip_id:\\d+}/status", method = RequestMethod.GET)
+    public String tripStatusPage(@PathVariable int trip_id, ModelMap modelMap) {
+        Trip trip = tripsService.findById(trip_id);
+        modelMap.put("trip", trip);
+        return "tripstatus";
+    }
 
+    @RequestMapping(value = "/trips/{trip_id:\\d+}/status", method = RequestMethod.POST)
+    public String tripStatus(@PathVariable int trip_id, @RequestParam String status, Principal principal) {
+        User user = (User) ((Authentication) principal).getPrincipal();
+        Trip trip = tripsService.findById(trip_id);
+        trip.setStatus(status);
+        tripsService.update(trip);
+        return "redirect:/users/" + user.getId();
+    }
+
+    @RequestMapping(value = "/trips/{trip_id:\\d+}/review", method = RequestMethod.GET)
+    public String tripReviewPage(@PathVariable int trip_id, ModelMap modelMap, Principal principal) {
+        User user = (User) ((Authentication) principal).getPrincipal();
+        Trip trip = tripsService.findById(trip_id);
+        modelMap.put("trip", trip);
+        return "tripreview";
+    }
+
+    @RequestMapping(value = "/trips/{trip_id:\\d+}/review", method = RequestMethod.POST)
+    public String tripReview(@PathVariable int trip_id, @ModelAttribute(name = "review") Review review,
+                             Principal principal) {
+        User user = (User) ((Authentication) principal).getPrincipal();
+        Trip trip = tripsService.findById(trip_id);
+        review.setUser(user);
+        review.setTrip(trip);
+        reviewsService.addReview(review);
+        if (user.getDriver() != null && trip.getDriver().getUser().getId() == user.getId()) {
+            for (Passenger passenger : trip.getPassengers()) {
+                passenger.setRating(passenger.getRating() + review.getGrade());
+                passengersService.update(passenger);
+            }
+
+        } else {
+            for (Passenger passenger : trip.getPassengers()) {
+                if (passenger.getUser().getId() == user.getId()) {
+                    Driver driver = trip.getDriver();
+                    driver.setRating(driver.getRating() + review.getGrade());
+                    driversService.update(driver);
+                    break;
+                }
+            }
+
+        }
+
+        return "redirect:/users/" + user.getId();
+    }
 }
+

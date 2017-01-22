@@ -69,8 +69,10 @@
 
                         <div class="col-xs-12 col-sm-6" style="background: #bce8f1">
                             <h3 style="text-align: center">Водитель </h3>
-                            <h4>Рейтинг: <strong> </strong></h4>
-                            <h4>Количество поездок: <strong> XXX </strong></h4>
+                            <#if endDriverTrips?exists>>
+                            <h4>Рейтинг: <strong></strong></h4>
+                            <h4>Количество поездок: <strong> ${endDriverTrips?size} </strong></h4>
+                            </#if>
                         <#if user.id == userinfo.id>
                             <h4 style="text-align: center">
                                 <a href="/newauto">
@@ -87,7 +89,7 @@
                         <div class="col-xs-12 col-sm-6" style="background: #c1e2b3">
                             <h3 style="text-align: center">Пассажир</h3>
                             <h4>Рейтинг: <strong> XXX </strong></h4>
-                            <h4>Количество поездок: <strong> XXX </strong></h4>
+                            <h4>Количество поездок: <strong> ${endPasTrips?size} </strong></h4>
                         <#if user.id == userinfo.id>
                             <h4 style="text-align: center">
                                 <a href="/newtrip">
@@ -154,6 +156,9 @@
                         <#if driverTrips?exists>
                             <#list driverTrips as dt>
                                 <h4>${dt.departure} - ${dt.destination} : ${dt.date} </h4>
+                                <p>Статус: <#if user.id = userinfo.id><a
+                                        href="/trips/${dt.id}/status">${dt.status}</a><#else>#{dt.status}</#if>
+                                </p>
                                 <#if user.id != dt.driver.user.id>
                                     <a href="/trips/${dt.id}">Записаться</a>
                                 </#if>
@@ -167,6 +172,7 @@
                         <#if pasTrips?exists>
                             <#list pasTrips as pt>
                                 <h4>${pt.departure} - ${pt.destination} : ${pt.date}</h4>
+                                <p>Статус: ${pt.status}</p>
                                 <hr/>
                             </#list>
                         </#if>
@@ -178,21 +184,24 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-6" style="background: #bce8f1">
-                            <h4>Количество поездок: <strong> XXX </strong></h4>
-                        <#--<p>-->
-                        <#--<small>Followers</small>-->
-                        <#--</p>-->
-                        <#--<button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Предложить-->
-                        <#--поездку-->
-                        <#--</button>-->
+                        <#if endDriverTrips?exists>
+                            <#list endDriverTrips as dt>
+                                <h4>${dt.departure} - ${dt.destination} : ${dt.date} </h4>
+                                <#if user.id = userinfo.id><p><a
+                                        href="/trips/${dt.id}/review">Оставить отзыв</a></p></#if>
+                                <hr/>
+                            </#list>
+                        </#if>
                         </div><!--/col-->
                         <div class="col-xs-12 col-sm-6" style="background: #c1e2b3">
-                            <h4>Количество поездок: <strong> XXX </strong></h4>
-                        <#--<p>-->
-                        <#--<small>Пассажир</small>-->
-                        <#--</p>-->
-                        <#--<button class="btn btn-info btn-block"><span class="fa fa-user"></span> View Profile-->
-                        <#--</button>-->
+                        <#if endPasTrips?exists>
+                            <#list endPasTrips as pt>
+                                <h4>${pt.departure} - ${pt.destination} : ${pt.date}</h4>
+                                <#if user.id = userinfo.id><p><a
+                                        href="/trips/${pt.id}/review">Оставить отзыв</a></p></#if>
+                                <hr/>
+                            </#list>
+                        </#if>
 
                         </div><!--/col-->
 

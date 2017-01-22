@@ -30,6 +30,8 @@ public class User implements UserDetails{
     private Driver driver;
     @OneToOne(mappedBy = "user")
     private Passenger passenger;
+    @OneToMany(mappedBy = "user")
+    List<Review> reviews;
 
     public User(){    }
 
@@ -154,6 +156,14 @@ public class User implements UserDetails{
 
     public void setPassenger(Passenger passenger) {
         this.passenger = passenger;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     @Override

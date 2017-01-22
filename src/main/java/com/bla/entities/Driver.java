@@ -1,5 +1,8 @@
 package com.bla.entities;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -21,6 +24,7 @@ public class Driver {
     @OneToMany(targetEntity = Automobile.class, mappedBy = "driver", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Automobile> automobileList;
     @OneToMany(mappedBy = "driver")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Trip> trips;
 
     public Driver() {

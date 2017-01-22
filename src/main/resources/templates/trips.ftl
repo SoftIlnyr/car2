@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Предложить поездку</title>
+    <title>Поездки</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -25,6 +25,7 @@
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script src="/js/moment-with-locales.js"></script>
     <script src="/js/bootstrap-datetimepicker.js"></script>
+    <script src="/js/MyScripts1.js"></script>
     <script async="" src="/js/analytics.js"></script>
     <!-- jQuery -->
 
@@ -40,7 +41,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h1>Информация о поездке</h1>
+                <h1>Поиск поездок</h1>
             </div>
         </div>
     </div>
@@ -48,9 +49,27 @@
 
 <!-- Page Content -->
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
+    <form action="/trips/" method="POST">
+        <div class="form-group row">
+            <label for="departure" class="col-sm-2 col-form-label">Откуда</label>
+            <div class="col-sm-10">
+                <input type="text" name="departure" class="form-control" id="departure" oninput="findTrips(this)"
+                       placeholder="Пункт отправления"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="destination" class="col-sm-2 col-form-label">Куда</label>
+            <div class="col-sm-10">
+                <input type="text" name="destination" class="form-control" id="destination" oninput="findTrips(this)"
+                       placeholder="Пункт назначения"/>
+            <#--<@form.errors path="email"></@form.errors>-->
+            </div>
+        </div>
+    </form>
+    <div class="row" id="trips">
+    <#list trips as trip>
 
+        <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
@@ -62,47 +81,26 @@
                             </p>
                             <p><strong>Автомобиль: </strong> ${trip.auto.brand} ${trip.auto.model}
                                 - ${trip.auto.licensePlate} </p>
-                        <#if trip.info?has_content>
-                            <p><strong>Информация: </strong> ${trip.info}</p></#if>
+                            <a href="/trips/${trip.id}">
+                                <button class="btn btn-success">Записаться</button>
+                            </a>
                         </div><!--/col-->
 
                     </div><!--/col-->
 
-                </div><!--/col-->
+                </div><!--/row-->
 
-            </div><!--/row-->
-        </div><!--/panel-body-->
-    </div><!--/panel-->
+            </div><!--/panel-body-->
+        </div><!--/panel-->
 
-    <form action="/trips/${trip.id}" method="POST">
-        <div class="form-group row">
-            <label for="nickname" class="col-sm-2 col-form-label">Количество пассажиров</label>
-            <div class="col-sm-10">
-                <input type="text" name="count" class="form-control" id="count"
-                       placeholder="Количество пассажиров"/>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-sm-2 control-label">Информация:</label>
-            <div class="col-sm-10">
-                                <textarea class="form-control" name="info" placeholder="Дополнительная информация"
-                                          rows="10"></textarea>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="offset-sm-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Записаться</button>
-            </div>
-        </div>
+    </#list>
+
+    <#include "footer.ftl">
+
+    </div>
 
 
-    </form>
-<#include "footer.ftl">
-
-</div>
-
-
-<!-- /.container -->
+    <!-- /.container -->
 
 
 </body>

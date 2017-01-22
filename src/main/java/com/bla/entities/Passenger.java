@@ -1,5 +1,9 @@
 package com.bla.entities;
 
+import org.hibernate.annotations.IndexColumn;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -20,6 +24,7 @@ public class Passenger {
     @ManyToMany(mappedBy = "passengers")
     private List<Trip> trips;
     @OneToMany(mappedBy = "passenger")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Booking> bookings;
 
     public Passenger() {

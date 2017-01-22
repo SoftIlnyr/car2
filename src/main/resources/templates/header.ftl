@@ -16,11 +16,13 @@
         <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#">Найти</a>
+                    <a href="/trips">Найти</a>
                 </li>
+            <#if user?exists && user.driver?exists>
                 <li>
                     <a href="/newtrip">Предложить поездку</a>
                 </li>
+            </#if>
             <#if user?exists>
                 <li>
                     <a href="/users/${user.id}">${user.nickname}</a>

@@ -15,6 +15,12 @@ public interface TripsService {
 
     List<Trip> findAll();
 
+    List<Trip> findAllOrderDate();
+
+    List<Trip> findByStatusOrderDate();
+
+    List<Trip> findBySearch(String departure, String destination);
+
     Trip findById(int id);
 
     List<Trip> lastTrips();

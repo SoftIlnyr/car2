@@ -35,6 +35,22 @@ public class TripsServiceIMPL implements TripsService {
     }
 
     @Override
+    public List<Trip> findAllOrderDate() {
+        return tripsRepository.findAllByOrderByDateDesc();
+    }
+
+    @Override
+    public List<Trip> findByStatusOrderDate() {
+        return tripsRepository.findByStatusOrderByDateDesc("Ожидание");
+    }
+
+    @Override
+    public List<Trip> findBySearch(String departure, String destination) {
+        return tripsRepository.findByDepartureAndDestinationOrderByDateDesc(departure, destination);
+    }
+
+
+    @Override
     public Trip findById(int id) {
         return tripsRepository.findOne(id);
     }

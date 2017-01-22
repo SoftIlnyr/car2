@@ -12,4 +12,10 @@ import java.util.List;
 @Repository
 public interface TripsRepository extends JpaRepository<Trip, Integer> {
     public List<Trip> findTop10ByOrderByDateDesc();
+
+    public List<Trip> findAllByOrderByDateDesc();
+
+    public List<Trip> findByStatusOrderByDateDesc(final String status);
+
+    public List<Trip> findByDepartureAndDestinationOrderByDateDesc(String destination, String departure);
 }

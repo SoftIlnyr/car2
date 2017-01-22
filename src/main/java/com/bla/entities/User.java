@@ -1,5 +1,7 @@
 package com.bla.entities;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +16,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "users", schema = "public", catalog = "carcarbla")
-public class User implements UserDetails{
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_secuence")
     @SequenceGenerator(name = "user_id_secuence", sequenceName = "users_id_seq", allocationSize = 1)
@@ -31,9 +33,11 @@ public class User implements UserDetails{
     @OneToOne(mappedBy = "user")
     private Passenger passenger;
     @OneToMany(mappedBy = "user")
+    @LazyCollection(LazyCollectionOption.FALSE)
     List<Review> reviews;
 
-    public User(){    }
+    public User() {
+    }
 
     public User(String nickname, String password, String firstname, String surname, String email, String role, String avatar) {
         this.nickname = nickname;

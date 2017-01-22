@@ -46,51 +46,33 @@
 
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-8">
-                            <h2>${userinfo.firstname} ${userinfo.surname}</h2>
-                            <p><strong>Пассажир: </strong> Да </p>
-                            <p><strong>Водитель: </strong> Да </p>
+                <#--<div class="row">-->
+                    <div class="col-xs-12 col-sm-8">
+                        <h2>${userinfo.firstname} ${userinfo.surname}</h2>
+                        <p><strong>Пассажир: </strong> <#if userinfo.passenger?exists>Да<#else>Нет</#if> </p>
+                        <p><strong>Водитель: </strong> <#if userinfo.driver?exists>Да<#else>Нет</#if> </p>
+                    <#if userinfo.driver?exists>
+                        <h4><strong>Автомобили: </strong></h4>
+                        <#list userinfo.driver.automobileList as auto>
+                            <p>${auto.brand} ${auto.model}</p>
+                        </#list>
+
+                    </#if>
+
+
+                    </div><!--/col-->
+                    <div class="col-xs-12 col-sm-4 text-center" style="margin-bottom: 10px;">
+                        <img src="/files/${userinfo.avatar}" alt=""
+                             class="center-block img-responsive">
+
+                    </div><!--/col-->
+                    <div class="col-xs-12 <#if userinfo.driver?exists>col-sm-6<#else>col-sm-12</#if> "
+                         style="background: #c1e2b3">
+                        <h3 style="text-align: center">Пассажир</h3>
+                        <h4>Рейтинг: <strong> ${userinfo.passenger.rating} </strong></h4>
+                        <h4>Количество поездок: <strong> ${endPasTrips?size} </strong></h4>
+                    <#if user.id == userinfo.id>
                         <#if userinfo.driver?exists>
-                            <h4><strong>Автомобили: </strong></h4>
-                            <#list userinfo.driver.automobileList as auto>
-                                <p>${auto.brand} ${auto.model}</p>
-                            </#list>
-
-                        </#if>
-
-
-                        </div><!--/col-->
-                        <div class="col-xs-12 col-sm-4 text-center">
-                            <img src="http://api.randomuser.me/portraits/men/49.jpg" alt=""
-                                 class="center-block img-circle img-responsive">
-
-                        </div><!--/col-->
-
-                        <div class="col-xs-12 col-sm-6" style="background: #bce8f1">
-                            <h3 style="text-align: center">Водитель </h3>
-                            <#if endDriverTrips?exists>>
-                            <h4>Рейтинг: <strong></strong></h4>
-                            <h4>Количество поездок: <strong> ${endDriverTrips?size} </strong></h4>
-                            </#if>
-                        <#if user.id == userinfo.id>
-                            <h4 style="text-align: center">
-                                <a href="/newauto">
-                                    <button class="btn btn-info btn-block"><span class="fa fa-plus-circle"></span>
-                                        Добавить авто
-                                    </button>
-                                </a>
-                            </h4>
-                        </#if>
-                        <#--<p>-->
-                        <#--<small>Followers</small>-->
-                        <#--</p>-->
-                        </div><!--/col-->
-                        <div class="col-xs-12 col-sm-6" style="background: #c1e2b3">
-                            <h3 style="text-align: center">Пассажир</h3>
-                            <h4>Рейтинг: <strong> XXX </strong></h4>
-                            <h4>Количество поездок: <strong> ${endPasTrips?size} </strong></h4>
-                        <#if user.id == userinfo.id>
                             <h4 style="text-align: center">
                                 <a href="/newtrip">
                                     <button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span>
@@ -99,120 +81,159 @@
                                     </button>
                                 </a>
                             </h4>
+                        <#else>
+                            <h4 style="text-align: center">
+                                <a href="/newauto">
+                                    <button class="btn btn-info btn-block"><span
+                                            class="fa fa-plus-circle"></span>
+                                        Стать водителем (Добавить авто)
+                                    </button>
+                                </a>
+                            </h4>
+                        </#if>
+                    </#if>
+                    </div>
+                <#if userinfo.driver?exists>
+                    <div class="col-xs-12 col-sm-6" style="background: #bce8f1">
+                        <h3 style="text-align: center">Водитель </h3>
+                        <#if endDriverTrips?exists>
+                            <h4>Рейтинг: <strong>${userinfo.driver.rating}</strong></h4>
+                            <h4>Количество поездок: <strong> ${endDriverTrips?size} </strong></h4>
+                        </#if>
+                        <#if user.id == userinfo.id>
+                            <h4 style="text-align: center">
+                                <a href="/newauto">
+                                    <button class="btn btn-info btn-block"><span
+                                            class="fa fa-plus-circle"></span>
+                                        Добавить авто
+                                    </button>
+                                </a>
+                            </h4>
                         </#if>
 
-                        <#--<p>-->
-                        <#--<small>Пассажир</small>-->
-                        <#--</p>-->
-                        <#--<button class="btn btn-info btn-block"><span class="fa fa-user"></span> View Profile-->
-                        <#--</button>-->
+                    </div><!--/col-->
+                </#if>
 
-                        </div><!--/col-->
+                <#--</div><!--/col&ndash;&gt;-->
 
-                    <#if bookings?has_content>
-                        <div class="col-xs-12 col-sm-12">
-                            <hr/>
-                            <h3 style="text-align: center">Желающие поехать с вами</h3>
-                        </div>
+                <#if bookings?has_content>
+                    <div class="col-xs-12 col-sm-12">
+                        <hr/>
+                        <h3 style="text-align: center">Желающие поехать с вами</h3>
+                    </div>
+                    <#list bookings as b>
 
                         <div class="col-xs-12 col-sm-12" style="background: #bce8f1; padding-top: 20px">
-                            <#list bookings as b>
-                                <div class="col-xs-6 col-sm-6">
-                                    <p>${b.trip.departure} - ${b.trip.destination} : ${b.trip.date} </p>
-                                    <h4>Пассажиры: ${b.passenger.user.firstname} ${b.passenger.user.firstname}
-                                        (${b.count}
-                                        пассажиров)</h4>
-                                    <p>Комментарий пассажира: ${b.info}</p>
-                                </div>
-                                <div class="col-xs-3 col-sm-3">
+                            <div class="col-xs-6 col-sm-6">
+                                <p>${b.trip.departure} - ${b.trip.destination} : ${b.trip.date} </p>
+                                <h4>Пассажиры: ${b.passenger.user.firstname} ${b.passenger.user.firstname}
+                                    (${b.count}
+                                    пассажиров)</h4>
+                                <p>Комментарий пассажира: ${b.info}</p>
+                            </div>
+                            <div class="col-xs-3 col-sm-3">
 
-                                    <a href="/bookings/${b.id}/conf">
-                                        <button class="btn btn-success btn-block"><span
-                                                class="fa fa-plus-circle"></span>
-                                            Принять
-                                        </button>
-                                    </a>
-                                </div>
-                                <div class="col-xs-3 col-sm-3">
+                                <a href="/bookings/${b.id}/conf">
+                                    <button class="btn btn-success btn-block"><span
+                                            class="fa fa-plus-circle"></span>
+                                        Принять
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="col-xs-3 col-sm-3">
 
-                                    <a href="/bookings/${b.id}/deny">
-                                        <button class="btn btn-danger btn-block"><span class="fa fa-plus-circle"></span>
-                                            Отклонить
-                                        </button>
-                                    </a>
-                                </div>
-                                <hr/>
+                                <a href="/bookings/${b.id}/deny">
+                                    <button class="btn btn-danger btn-block"><span class="fa fa-plus-circle"></span>
+                                        Отклонить
+                                    </button>
+                                </a>
+                            </div>
 
-                            </#list>
                         </div>
+                        <hr/>
+
+                    </#list>
+
+                </#if>
+                <#if driverTrips?has_content || pasTrips?has_content>
+
+                    <div class="col-xs-12 col-sm-12">
+                        <hr/>
+                        <h3 style="text-align: center">Предстоящие поездки</h3>
+                    </div>
+
+                    <#if pasTrips?has_content>
+                        <div class="col-xs-12 col-sm-6" style="background: #c1e2b3">
+
+                            <#list pasTrips as pt>
+                                <h4>${pt.departure} - ${pt.destination} : ${pt.date}</h4>
+                                <p>Статус: ${pt.status}</p>
+                                <hr/>
+                            </#list>
+                        </div><!--/col-->
+
                     </#if>
 
-                        <div class="col-xs-12 col-sm-12">
-                            <hr/>
-                            <h3 style="text-align: center">Предстоящие поездки</h3>
-                        </div>
-
+                    <#if driverTrips?has_content>
                         <div class="col-xs-12 col-sm-6" style="background: #bce8f1">
-                        <#if driverTrips?exists>
+
                             <#list driverTrips as dt>
                                 <h4>${dt.departure} - ${dt.destination} : ${dt.date} </h4>
                                 <p>Статус: <#if user.id = userinfo.id><a
-                                        href="/trips/${dt.id}/status">${dt.status}</a><#else>#{dt.status}</#if>
+                                        href="/trips/${dt.id}/status">${dt.status}</a><#else>${dt.status}</#if>
                                 </p>
                                 <#if user.id != dt.driver.user.id>
                                     <a href="/trips/${dt.id}">Записаться</a>
                                 </#if>
                                 <hr/>
                             </#list>
-                        </#if>
-
-
                         </div><!--/col-->
+
+                    </#if>
+                </#if>
+
+                <#if endPasTrips?has_content || endDriverTrips?has_content>
+                    <div class="col-xs-12 col-sm-12">
+                        <hr/>
+                        <h3 style="text-align: center">Последние поездки</h3>
+                    </div>
+
+                    <#if endPasTrips?has_content>
                         <div class="col-xs-12 col-sm-6" style="background: #c1e2b3">
-                        <#if pasTrips?exists>
-                            <#list pasTrips as pt>
-                                <h4>${pt.departure} - ${pt.destination} : ${pt.date}</h4>
-                                <p>Статус: ${pt.status}</p>
-                                <hr/>
-                            </#list>
-                        </#if>
-                        </div><!--/col-->
 
-                        <div class="col-xs-12 col-sm-12">
-                            <hr/>
-                            <h3 style="text-align: center">Последние поездки</h3>
-                        </div>
-
-                        <div class="col-xs-12 col-sm-6" style="background: #bce8f1">
-                        <#if endDriverTrips?exists>
-                            <#list endDriverTrips as dt>
-                                <h4>${dt.departure} - ${dt.destination} : ${dt.date} </h4>
-                                <#if user.id = userinfo.id><p><a
-                                        href="/trips/${dt.id}/review">Оставить отзыв</a></p></#if>
-                                <hr/>
-                            </#list>
-                        </#if>
-                        </div><!--/col-->
-                        <div class="col-xs-12 col-sm-6" style="background: #c1e2b3">
-                        <#if endPasTrips?exists>
                             <#list endPasTrips as pt>
                                 <h4>${pt.departure} - ${pt.destination} : ${pt.date}</h4>
                                 <#if user.id = userinfo.id><p><a
                                         href="/trips/${pt.id}/review">Оставить отзыв</a></p></#if>
                                 <hr/>
                             </#list>
-                        </#if>
-
                         </div><!--/col-->
 
-                    </div><!--/row-->
-                </div><!--/panel-body-->
-            </div><!--/panel-->
+                    </#if>
+
+                    <#if endDriverTrips?has_content>
+                        <div class="col-xs-12 col-sm-6" style="background: #bce8f1">
+
+                            <#list endDriverTrips as dt>
+                                <h4>${dt.departure} - ${dt.destination} : ${dt.date} </h4>
+                                <#if user.id = userinfo.id><p><a
+                                        href="/trips/${dt.id}/review">Оставить отзыв</a></p></#if>
+                                <hr/>
+                            </#list>
+                        </div><!--/col-->
+
+                    </#if>
+                </#if>
 
 
-        </div>
+                </div><!--/row-->
+            </div><!--/panel-body-->
+        </div><!--/panel-->
+
+
     </div>
 <#include "footer.ftl">
+
 </div>
 <!-- /.container -->
 

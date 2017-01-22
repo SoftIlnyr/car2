@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/hello", "/users", "/registration", "/css/**", "/js/**", "/fonts/**",
-                        "/images/**").permitAll()
+                        "/images/**", "/trips", "/trips/find").permitAll()
 //                .antMatchers("/newtrip").hasRole("DRIVER")
                 .anyRequest().authenticated()
                 .and()

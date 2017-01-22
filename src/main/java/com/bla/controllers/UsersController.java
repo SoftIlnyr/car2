@@ -4,14 +4,21 @@ import com.bla.entities.*;
 import com.bla.forms.TripForm;
 import com.bla.forms.UserForm;
 import com.bla.services.INTERFACES.*;
+import com.bla.storage.StorageService;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -49,7 +56,13 @@ public class UsersController {
     @Autowired
     ReviewsService reviewsService;
 
+    private final StorageService storageService;
+
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+    public UsersController(StorageService storageService) {
+        this.storageService = storageService;
+    }
 
     @GetMapping("/login")
     public String loginPage(ModelMap modelMap, Principal principal) {
@@ -69,7 +82,7 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String registrationPost(@ModelAttribute("user") UserForm regForm, BindingResult bindingResult,
+    public String registrationPost(@ModelAttribute("user") UserForm regForm, @RequestParam("avatar") MultipartFile avatar, BindingResult bindingResult,
                                    ModelMap modelMap) throws IOException {
         if (bindingResult.hasErrors()) {
             return "registration";
@@ -90,6 +103,16 @@ public class UsersController {
         user.setPassword(cryptPassword);
         user.setEmail(regForm.getEmail());
         user.setRole("USER");
+
+        if (avatar != null) {
+            storageService.store(avatar);
+            user.setAvatar(avatar.getOriginalFilename());
+        } else {
+            user.setAvatar("defaut.png");
+        }
+
+
+//        user.setAvatar(avatar.getOriginalFilename());
 
 
 //        if (!avatar.isEmpty()) {
@@ -329,6 +352,35 @@ public class UsersController {
         }
 
         return "redirect:/users/" + user.getId();
+    }
+
+    @RequestMapping(value = "/trips", method = RequestMethod.GET)
+    public String TripsPage(ModelMap modelMap) {
+        List<Trip> trips = tripsService.findByStatusOrderDate();
+        modelMap.put("trips", trips);
+        return "trips";
+    }
+
+    @RequestMapping(value = "/trips/find", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<Trip> getTrips(HttpServletRequest request) {
+        String departure = request.getParameter("departure");
+        String destination = request.getParameter("destination");
+        List<Trip> trips = tripsService.findBySearch(departure, destination);
+        return trips;
+    }
+
+
+    @GetMapping("/files/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+
+        Resource file = storageService.loadAsResource(filename);
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+file.getFilename()+"\"")
+                .body(file);
     }
 }
 

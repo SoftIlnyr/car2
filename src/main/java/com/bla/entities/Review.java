@@ -1,5 +1,8 @@
 package com.bla.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 
 /**
@@ -14,9 +17,11 @@ public class Review {
     int id;
     @ManyToOne(targetEntity = Trip.class)
     @JoinColumn(name = "trip_id", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     Trip trip;
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     User user;
     String text;
     int grade;

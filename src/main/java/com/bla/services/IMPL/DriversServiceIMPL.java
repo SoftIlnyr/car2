@@ -41,4 +41,9 @@ public class DriversServiceIMPL implements DriversService {
         return driversRepository.findAll();
     }
 
+    @Override
+    public List<Driver> getBest() {
+        return driversRepository.findTop9ByOrderByRatingDesc();
+    }
+
 }

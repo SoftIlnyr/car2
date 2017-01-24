@@ -1,5 +1,7 @@
 package com.bla.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,11 +31,14 @@ public class User implements UserDetails {
     private String email;
     private String role;
     @OneToOne(mappedBy = "user")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     private Driver driver;
     @OneToOne(mappedBy = "user")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     private Passenger passenger;
     @OneToMany(mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     List<Review> reviews;
 
     public User() {

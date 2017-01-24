@@ -1,5 +1,7 @@
 package com.bla.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -20,11 +22,14 @@ public class Driver {
     private int rating;
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     private User user;
     @OneToMany(targetEntity = Automobile.class, mappedBy = "driver", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     private List<Automobile> automobileList;
     @OneToMany(mappedBy = "driver")
     @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     private List<Trip> trips;
 
     public Driver() {

@@ -1,5 +1,8 @@
 package com.bla.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -16,13 +19,16 @@ public class Trip {
     private int id;
     @ManyToOne(targetEntity = Driver.class)
     @JoinColumn(name = "driver_id", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     private Driver driver;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "auto_id", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     private Automobile auto;
     @ManyToMany(cascade = CascadeType.ALL)
-            @JoinTable(name = "passengers_trips", joinColumns = @JoinColumn(name = "trip_id"), inverseJoinColumns =
-            @JoinColumn(name = "passenger_id"))
+    @JoinTable(name = "passengers_trips", joinColumns = @JoinColumn(name = "trip_id"), inverseJoinColumns =
+    @JoinColumn(name = "passenger_id"))
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     List<Passenger> passengers;
     private String departure;
     private String destination;
@@ -33,8 +39,10 @@ public class Trip {
     private String status;
     private String info; //информация и доп. условия
     @OneToMany(mappedBy = "trip")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     List<Booking> bookings;
     @OneToMany(mappedBy = "trip")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     List<Review> reviews;
 
     public Trip() {

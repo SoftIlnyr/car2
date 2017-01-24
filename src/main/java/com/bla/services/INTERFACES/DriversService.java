@@ -16,4 +16,6 @@ public interface DriversService {
 
     List<Driver> findAll();
 
+    List<Driver> getBest();
+
 }

@@ -1,6 +1,10 @@
 package com.bla.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by softi on 16.01.2017.
@@ -19,7 +23,11 @@ public class Automobile {
     int age;
     @ManyToOne(targetEntity = Driver.class)
     @JoinColumn(name = "driver_id", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
     Driver driver;
+    @OneToMany(mappedBy = "auto")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+    List<Trip> trips;
 
     public Automobile() {
     }
@@ -79,5 +87,13 @@ public class Automobile {
 
     public void setDriver(Driver driver) {
         this.driver = driver;
+    }
+
+    public List<Trip> getTrips() {
+        return trips;
+    }
+
+    public void setTrips(List<Trip> trips) {
+        this.trips = trips;
     }
 }

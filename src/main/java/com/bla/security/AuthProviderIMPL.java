@@ -20,9 +20,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by softi on 02.05.2016.
- */
+
 @Component(value = "authProvider")
 @ComponentScan(basePackages = {"com.bla.repositories"})
 public class AuthProviderIMPL implements AuthenticationProvider {

@@ -8,9 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by softi on 20.01.2017.
- */
+
 public class TripForm {
     private String auto;
     private String departure;

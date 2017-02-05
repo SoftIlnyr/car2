@@ -11,9 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
-/**
- * Created by softi on 02.05.2016.
- */
+
 @Component
 public class UserInfoHandler implements HandlerInterceptor {
     @Override

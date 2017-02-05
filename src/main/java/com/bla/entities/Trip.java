@@ -7,9 +7,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by softi on 16.01.2017.
- */
+
 @Entity
 @Table(name = "trips", schema = "public", catalog = "carcarbla")
 public class Trip {

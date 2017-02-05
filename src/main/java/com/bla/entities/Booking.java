@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 
-/**
- * Created by softi on 21.01.2017.
- */
 @Entity
 @Table(name = "bookings", schema = "public", catalog = "carcarbla")
 public class Booking {

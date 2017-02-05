@@ -6,9 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Created by softi on 19.01.2017.
- */
+
 @Repository
 public interface DriversRepository extends JpaRepository<Driver, Integer> {
 

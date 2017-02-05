@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import javax.persistence.*;
 import java.util.List;
 
-/**
- * Created by softi on 16.01.2017.
- */
+
 @Entity
 @Table(name = "autos", schema = "public", catalog = "carcarbla")
 public class Automobile {

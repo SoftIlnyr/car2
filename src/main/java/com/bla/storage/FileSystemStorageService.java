@@ -1,8 +1,6 @@
 package com.bla.storage;
 
-/**
- * Created by softi on 22.01.2017.
- */
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

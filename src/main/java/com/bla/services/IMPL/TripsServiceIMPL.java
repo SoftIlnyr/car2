@@ -9,9 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Created by softi on 20.01.2017.
- */
+
 @Service
 @Transactional
 public class TripsServiceIMPL implements TripsService {

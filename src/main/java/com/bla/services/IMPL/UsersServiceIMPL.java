@@ -9,9 +9,7 @@ import com.bla.repositories.UsersRepository;
 
 import java.util.List;
 
-/**
- * Created by softi on 23.04.2016.
- */
+
 @Service
 @Transactional
 public class UsersServiceIMPL implements UsersService {

@@ -13,9 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by softi on 12.01.2017.
- */
+
 @Entity
 @Table(name = "users", schema = "public", catalog = "carcarbla")
 public class User implements UserDetails {

@@ -8,9 +8,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.util.List;
 
-/**
- * Created by softi on 16.01.2017.
- */
+
 @Entity
 @Table(name = "drivers", schema = "public", catalog = "carcarbla")
 public class Driver {

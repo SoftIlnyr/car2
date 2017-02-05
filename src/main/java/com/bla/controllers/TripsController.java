@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by softi on 24.01.2017.
- */
+
 @Controller
 @EnableAutoConfiguration
 public class TripsController {
